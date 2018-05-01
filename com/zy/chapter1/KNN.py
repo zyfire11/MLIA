@@ -34,4 +34,19 @@ def kNNClassify(newInput, dataSet, labels, k):
             maxIndex = key
     return maxIndex
 
+def file2matrix(filename):
+    fr = open(filename)
+    arrayOlines = fr.readlines()
+    numberOfLines = len(arrayOlines)
+    returnMat = zeros((numberOfLines, 3))
+    classLabelVector = []
+    index = 0
+    for line in arrayOlines:
+        line = line.strip()
+        listFromLine = line.split('\t')
+        returnMat[index, :] = listFromLine[0:3]
+        classLabelVector.append(listFromLine[-1])
+        index += 1
+    return returnMat, classLabelVector
+
 
