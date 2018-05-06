@@ -2,11 +2,13 @@ from numpy import *
 import operator
 from os import listdir,path
 
+# 生成数据集
 def createDataSet():
     group = array([[1.0, 0.9], [1.0, 1.0], [0.1, 0.2], [0.0, 0.1]])
     labels = ['A', 'A', 'B', 'B']
     return group, labels
 
+# knn分类
 def kNNClassify(newInput, dataSet, labels, k):
     numSamples = dataSet.shape[0]
     # print(numSamples)
@@ -37,7 +39,7 @@ def kNNClassify(newInput, dataSet, labels, k):
     sortedClassCount = sorted(classCount.items(), key=operator.itemgetter(1), reverse=True)
     return sortedClassCount[0][0]
 
-
+# 读取文件数据转矩阵
 def file2matrix(filename):
     fr = open(filename)
     arrayOlines = fr.readlines()
@@ -53,6 +55,7 @@ def file2matrix(filename):
         index += 1
     return returnMat, classLabelVector
 
+# 特征数据归一化
 def autoNorm(dataSet):
     minVals = dataSet.min(0)
     maxVals = dataSet.max(0)
@@ -64,7 +67,7 @@ def autoNorm(dataSet):
     normDataSet = normDataSet/tile(ranges, (m, 1))
     return normDataSet, ranges, minVals
 
-
+# 约会人分类测试
 def datingClassTest(filePath):
     hoRatio = 0.1
     datingDataMat, datingLabels = file2matrix(filePath)
@@ -79,7 +82,7 @@ def datingClassTest(filePath):
             errorCount+=1.0
     print("总的错误率：%f" % (errorCount/float(numTestVecs)))
 
-# 约会数据输入识别
+# 约会数据输入分类识别
 def classifyPerson(filePath):
     resultList = ['not at all', 'in small doses', 'in large doses']
     percentTats = float(input('玩游戏所占时间比是多少:'))
@@ -91,7 +94,7 @@ def classifyPerson(filePath):
     result = kNNClassify(inArr, datingDataMat, datingLabels, 3)
     print("你可能是这种人：", resultList[result-1])
 
-
+# 图像文件转向量（32*32=》1*1024）
 def img2vector(filePath):
     returnVect = zeros((1, 1024))
     fr = open(filePath)
@@ -101,6 +104,7 @@ def img2vector(filePath):
             returnVect[0, i*32 + j] = int(lineStr[j])
     return returnVect
 
+# 手写数字分类测试
 def handwritingClassTest():
     trainFilePath = path.abspath("..") + "/data/digits/trainingDigits"
     testFilePath = path.abspath("..") + "/data/digits/testDigits"
